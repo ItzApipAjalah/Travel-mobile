@@ -3,7 +3,7 @@
 ## 1. Authentication
 
 Login:
-POST http://127.0.0.1:8000/api/auth/login
+POST http://127.0.0.1:8000/api/login
 
 ```json
 Body: {

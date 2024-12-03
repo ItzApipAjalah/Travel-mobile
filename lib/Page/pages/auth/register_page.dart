@@ -16,14 +16,55 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController = TextEditingController();
   bool isLoading = false;
+  String? nameError;
+  String? emailError;
+  String? passwordError;
+  String? confirmPasswordError;
+
+  bool _validateInputs() {
+    bool isValid = true;
+    setState(() {
+      nameError = null;
+      emailError = null;
+      passwordError = null;
+      confirmPasswordError = null;
+
+      // Validate name
+      if (nameController.text.isEmpty) {
+        nameError = 'Name is required';
+        isValid = false;
+      }
+
+      // Validate email
+      if (emailController.text.isEmpty) {
+        emailError = 'Email is required';
+        isValid = false;
+      } else if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+          .hasMatch(emailController.text)) {
+        emailError = 'Please enter a valid email';
+        isValid = false;
+      }
+
+      // Validate password
+      if (passwordController.text.isEmpty) {
+        passwordError = 'Password is required';
+        isValid = false;
+      }
+
+      // Validate confirm password
+      if (confirmPasswordController.text.isEmpty) {
+        confirmPasswordError = 'Please confirm your password';
+        isValid = false;
+      } else if (passwordController.text != confirmPasswordController.text) {
+        confirmPasswordError = 'Passwords do not match';
+        isValid = false;
+      }
+    });
+    return isValid;
+  }
 
   Future<void> register() async {
-    if (passwordController.text != confirmPasswordController.text) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Passwords do not match')),
-      );
-      return;
-    }
+    if (!_validateInputs()) return;
 
     setState(() {
       isLoading = true;
@@ -37,13 +78,18 @@ class _RegisterPageState extends State<RegisterPage> {
           'name': nameController.text,
           'email': emailController.text,
           'password': passwordController.text,
+          'password_confirmation': confirmPasswordController.text,
         }),
       );
 
       final data = jsonDecode(response.body);
 
-      if (data['status'] == true) {
+      if (response.statusCode == 200 && data['status'] == true) {
         if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+                content: Text('Registration successful. Please login.')),
+          );
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => const LoginPage()),
@@ -51,9 +97,26 @@ class _RegisterPageState extends State<RegisterPage> {
         }
       } else {
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Registration failed. Please try again.')),
-          );
+          // Handle validation errors from server
+          if (data['errors'] != null) {
+            setState(() {
+              if (data['errors']['name'] != null) {
+                nameError = data['errors']['name'][0];
+              }
+              if (data['errors']['email'] != null) {
+                emailError = data['errors']['email'][0];
+              }
+              if (data['errors']['password'] != null) {
+                passwordError = data['errors']['password'][0];
+              }
+            });
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                  content: Text(data['message'] ??
+                      'Registration failed. Please try again.')),
+            );
+          }
         }
       }
     } catch (e) {
@@ -92,39 +155,43 @@ class _RegisterPageState extends State<RegisterPage> {
               const SizedBox(height: 40),
               TextField(
                 controller: nameController,
-                decoration: const InputDecoration(
-                  labelText: 'Full Name',
+                decoration: InputDecoration(
+                  labelText: 'Name',
                   prefixIcon: Icon(Icons.person),
                   border: OutlineInputBorder(),
+                  errorText: nameError,
                 ),
               ),
               const SizedBox(height: 20),
               TextField(
                 controller: emailController,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'Email',
                   prefixIcon: Icon(Icons.email),
                   border: OutlineInputBorder(),
+                  errorText: emailError,
                 ),
               ),
               const SizedBox(height: 20),
               TextField(
                 controller: passwordController,
                 obscureText: true,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'Password',
                   prefixIcon: Icon(Icons.lock),
                   border: OutlineInputBorder(),
+                  errorText: passwordError,
                 ),
               ),
               const SizedBox(height: 20),
               TextField(
                 controller: confirmPasswordController,
                 obscureText: true,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'Confirm Password',
                   prefixIcon: Icon(Icons.lock),
                   border: OutlineInputBorder(),
+                  errorText: confirmPasswordError,
                 ),
               ),
               const SizedBox(height: 30),

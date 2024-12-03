@@ -13,7 +13,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(22, 255, 255, 255),
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -35,7 +35,11 @@ class HomePage extends StatelessWidget {
                     )),
                 InkWell(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => ReportPage(onCategorySelected: (int ) {  })));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                ReportPage(onCategorySelected: (int) {})));
                   },
                   child: Container(
                       child: Row(
@@ -44,10 +48,10 @@ class HomePage extends StatelessWidget {
                         "Riwayat Laporan",
                         style: TextStyle(
                             fontSize: 15,
-                            color:  Colors.black38,
+                            color: Colors.black38,
                             fontFamily: "Montserrat-Bold"),
                       ),
-                      Icon(Icons.keyboard_arrow_right,color: Colors.black38)
+                      Icon(Icons.keyboard_arrow_right, color: Colors.black38)
                     ],
                   )),
                 ),
@@ -79,7 +83,10 @@ class HomePage extends StatelessWidget {
                     )),
                 InkWell(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const HelpCenterPage()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const HelpCenterPage()));
                   },
                   child: Container(
                       child: const Row(
@@ -91,59 +98,81 @@ class HomePage extends StatelessWidget {
                             color: Colors.black38,
                             fontFamily: "Montserrat-Bold"),
                       ),
-                      Icon(Icons.keyboard_arrow_right,color: Colors.black38,)
+                      Icon(
+                        Icons.keyboard_arrow_right,
+                        color: Colors.black38,
+                      )
                     ],
                   )),
                 ),
               ],
             ),
-           const SizedBox(
+            const SizedBox(
               height: 10,
             ),
             const Categoryfaq(),
-            SizedBox(height: 10,),
+            SizedBox(
+              height: 10,
+            ),
             const FAQWidget(),
             Container(
               margin: EdgeInsets.only(top: 15),
               color: Color.fromRGBO(217, 217, 217, 1),
               height: 10,
             ),
-          SizedBox(height: 13,),
-          Row(
-            children: [
-              Container(
-                margin: EdgeInsets.only(left: 10),
-                child: Text("Hubungi Kami", style: TextStyle(fontSize: 18,color: Color.fromRGBO(30, 71, 105, 1),fontFamily: "Montserrat-Bold"),))
-            ],
-          ),
-          InkWell(
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => ChatBot()));
-            }, 
-            child: Row(
+            SizedBox(
+              height: 13,
+            ),
+            Row(
               children: [
                 Container(
-                  margin: EdgeInsets.only(top: 10,left: 15),
-                  width: 55,
-                  height: 55,
-                  decoration: BoxDecoration(
-                  color: Color.fromRGBO(103, 153, 195, 1),
-                  borderRadius: BorderRadius.circular(50)
-                  ),
-                  child: Icon(Icons.chat_bubble_outline,color: Colors.white,)
-                ),
-                Container(
-                  margin: EdgeInsets.only(left: 20),
-                  child: Text('Chat Dengan TravleMate',style: TextStyle(color: Color.fromRGBO(103, 153, 195, 1), fontSize: 16, fontFamily: "Montserrat-Bold"),),
-                ),
+                    margin: EdgeInsets.only(left: 10),
+                    child: Text(
+                      "Hubungi Kami",
+                      style: TextStyle(
+                          fontSize: 18,
+                          color: Color.fromRGBO(30, 71, 105, 1),
+                          fontFamily: "Montserrat-Bold"),
+                    ))
               ],
             ),
-          ),
-          SizedBox(height: 25,)
+            InkWell(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ChatBot()));
+              },
+              child: Row(
+                children: [
+                  Container(
+                      margin: EdgeInsets.only(top: 10, left: 15),
+                      width: 55,
+                      height: 55,
+                      decoration: BoxDecoration(
+                          color: Color.fromRGBO(103, 153, 195, 1),
+                          borderRadius: BorderRadius.circular(50)),
+                      child: Icon(
+                        Icons.chat_bubble_outline,
+                        color: Colors.white,
+                      )),
+                  Container(
+                    margin: EdgeInsets.only(left: 20),
+                    child: Text(
+                      'Chat Dengan TravleMate',
+                      style: TextStyle(
+                          color: Color.fromRGBO(103, 153, 195, 1),
+                          fontSize: 16,
+                          fontFamily: "Montserrat-Bold"),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 25,
+            )
           ],
         ),
       ),
     );
   }
 }
-
